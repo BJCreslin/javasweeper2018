@@ -1,0 +1,53 @@
+package sweeper;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class Ranges {
+    public static ArrayList<Coord> getAllCoords() {
+        return allCoords;
+    }
+
+    private static Coord size; //размеры поля экрана
+
+    public static void setSize(Coord _size) {
+        Ranges.size = _size;
+        allCoords = new ArrayList<>();
+        for (int y = 0; y < size.y; y++)
+            for (int x = 0; x < size.x; x++) {
+                allCoords.add(new Coord(x, y));
+            }
+    }
+
+    public static Coord getSize() {
+        return size;
+    }
+
+
+    static ArrayList<Coord> allCoords;
+    private static Random random = new Random();
+
+    static boolean inRanges(Coord coord) {
+        return coord.x >= 0 && coord.y >= 0 && coord.x < size.x && coord.y < size.y;
+    }
+
+    static Coord getRandomCoord() {
+        return new Coord(random.nextInt(size.x), random.nextInt(size.y));
+    }
+
+    static ArrayList<Coord> getCoordsAround(Coord coord) {
+        Coord around;
+        ArrayList<Coord> list = new ArrayList<>();
+        for (int x = coord.x - 1; x <= coord.x + 1; x++) {
+            for (int y = coord.y - 1; y <= coord.y + 1; y++) {
+                if (inRanges(around = new Coord(x, y))) {
+                    if (!around.equals(coord)) {
+                        list.add(around);
+                    }
+                }
+            }
+        }
+        return list;
+    }
+}
