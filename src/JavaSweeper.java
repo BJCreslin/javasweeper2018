@@ -5,13 +5,15 @@ import sweeper.Ranges;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class JavaSweeper extends JFrame {
     private Game game;
     private JPanel panel;
     private final static int COLS = 9;
     private final static int ROWS = 9;
-    private final static int BOMBS = 100;
+    private final static int BOMBS = 10;
     private final static int IMAGE_SIZE = 50;
 
 
@@ -37,11 +39,27 @@ public class JavaSweeper extends JFrame {
                 }
             }
         };
+        panel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                int x = e.getX() / IMAGE_SIZE;
+                int y = e.getY() / IMAGE_SIZE;
+                Coord coord = new Coord(x, y);
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    game.pressLeftButton(coord);
+                    panel.repaint();
+                } if (e.getButton() == MouseEvent.BUTTON3) {
+                    game.pressRightButton(coord);
+                    panel.repaint();
+                }
+            }
+        });
         panel.setPreferredSize(new Dimension(Ranges.getSize().x * IMAGE_SIZE,
                 Ranges.getSize().y * IMAGE_SIZE));
 
         add(panel);
     }
+
 
     private void initFrame() {
 
