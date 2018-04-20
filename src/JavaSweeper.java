@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 public class JavaSweeper extends JFrame {
     private Game game;
     private JPanel panel;
+    private JLabel label;
     private final static int COLS = 9;
     private final static int ROWS = 9;
     private final static int BOMBS = 10;
@@ -25,8 +26,14 @@ public class JavaSweeper extends JFrame {
         game = new Game(COLS, ROWS, BOMBS);
         game.start();
         setImages();
+        initLabel();
         initPanel();
         initFrame();
+    }
+
+    private void initLabel() {
+        label = new JLabel("Welcome");
+        add(label, BorderLayout.SOUTH);
     }
 
     private void initPanel() {
@@ -47,11 +54,15 @@ public class JavaSweeper extends JFrame {
                 Coord coord = new Coord(x, y);
                 if (e.getButton() == MouseEvent.BUTTON1) {
                     game.pressLeftButton(coord);
-                    panel.repaint();
-                } if (e.getButton() == MouseEvent.BUTTON3) {
-                    game.pressRightButton(coord);
-                    panel.repaint();
                 }
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    game.pressRightButton(coord);
+                }
+                if (e.getButton() == MouseEvent.BUTTON2) {
+                    game.start();
+                }
+                label.setText(getMessage());
+                panel.repaint();
             }
         });
         panel.setPreferredSize(new Dimension(Ranges.getSize().x * IMAGE_SIZE,
@@ -60,16 +71,29 @@ public class JavaSweeper extends JFrame {
         add(panel);
     }
 
+    private String getMessage() {
+        switch (game.getState()) {
+            case PLAYED:
+                return "THINK TWICE!";
+            case BOMBED:
+                return "YOU LOOSE!";
+            case WINNER:
+                return "Congratulations!";
+            default:
+                return "Welcome!";
+        }
+    }
+
 
     private void initFrame() {
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("JavaSweeper");
-        setLocationRelativeTo(null);
         setResizable(false);
-        setIconImage(getImage("icon"));
         setVisible(true);
         pack();
+        setLocationRelativeTo(null);
+        setIconImage(getImage("icon"));
     }
 
     private Image getImage(String name) {

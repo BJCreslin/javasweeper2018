@@ -21,4 +21,8 @@ public enum Box {
     public Box nextNumberBomb() {
         return Box.values()[this.ordinal() + 1];
     }
+
+    public int getNumber() {
+        return ordinal();
+    }
 }
